@@ -1,0 +1,192 @@
+:root {
+  --background-color: #414141;
+  --text-color: #e9e9e9;
+  --text-color-disabled: #1ad401;
+  --border-color-header-footer: 1px solid #393;
+  --text-family: sans-serif;
+}
+
+* {
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute; /* элемент вырывают из потока */
+  inline-size: 1px; /* делают элемент очень маленьким, но таким, чтобы не пропал совсем */
+  block-size: 1px;
+  margin: -1px; /* элемент убирают из поля зрения, сдвинув на размер самого себя */
+  padding: 0; /* обнуляют отступы, они есть у некоторых элементов по умолчанию */
+  border: 0; /* убирают границу, она тоже может быть у каких-то элементов */
+  clip: rect(0 0 0 0); /* это свойство обрезает видимую область до нулевого значения */
+  overflow: hidden; /* на всякий случай скрывают видимое за пределами блока */
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-block-size: 100vh;
+  background-color: rgb(41, 37, 53);
+  color: #e9e9e9;
+}
+
+.header{
+  display: flex;
+  justify-content: center;
+  margin-block-end: 10px;
+  padding-block: 10px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-block-end: var(--border-color-header-footer);
+
+}
+
+.header__title {
+  text-transform: uppercase;
+  font-family: var(--text-family);
+
+}
+
+.main {
+  align-self: center;
+  inline-size: 90%;
+  max-inline-size: 800px;
+}
+
+.radio + .label {
+  font-size: clamp(0.875rem, 0.6681rem + 1.0345vw, 1.25rem);
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  padding: 5px;
+  text-align: center;
+}
+
+.radio:checked + .label {
+  border-bottom-color: var(--text-color);
+  border-top-color: var(--text-color);
+  background-image: linear-gradient(175deg,#7be95c, #0f4001);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  text-transform: lowercase;
+  padding-block-start: 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, .3);
+  font-family: var(--text-family);
+  color: var(--text-color);
+  background-color: rgba(0, 0, 0, .25);
+}
+
+.form__radio {
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.fieldset div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form__button {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.label {
+  text-transform: uppercase;
+  font-family: var(--text-family);
+  color: var(--text-color);
+}
+
+.number {
+  background-color: rgba(255, 255, 255, .1);
+  border: none;
+  font-size: 20px;
+  color: var(--text-color);
+  min-inline-size: 100px;
+  padding-block: 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.range {
+  display: flex;
+  max-inline-size: 100%;
+  margin-block: 15px;
+  accent-color: #02810d;
+}
+
+.form__button {
+  flex-direction: row;
+  border: transparent;
+}
+
+.form__button {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.button {
+  block-size: 50px;
+  border-radius: 10px;
+  font-family: var(--text-family);
+  text-transform: uppercase;
+  font-size: clamp(0.625rem, 0.4489rem + 0.8803vw, 1.25rem);
+  color: rgba(255, 255, 255, .6);
+}
+
+.button_count {
+  inline-size: calc((100% / 10) * 6);
+  background-color: #3fb81e;
+  background-image: linear-gradient(175deg,#7be95c, #0f4001);
+  border: 1px solid #145801;
+}
+
+.button_clear {
+  inline-size: calc((100% / 10) * 4);
+  background-color: #b8871e;
+  background-image: linear-gradient(175deg,#ffaf02, #422d00);
+  border: 1px solid #5c3f00;
+}
+
+.button:active {
+  box-shadow: 0 0 10px #3fb81e;
+  opacity: .7;
+}
+
+.button:hover, .button:focus-visible, .number:focus-visible,  .range:focus-visible, .radio:hover {
+  outline: 1px solid rgba(0, 255, 140, 0.6);;
+  outline-offset: 0;
+  cursor: pointer;
+}
+
+.number:disabled {
+  color: var(--text-color-disabled);
+  font-weight: 900;
+}
+
+.footer {
+  display: flex;
+  padding-block: 15px;
+  justify-content: center;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  text-transform: uppercase;
+  font-family: var(--text-family);
+  border-block-start: var(--border-color-header-footer);
+
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
