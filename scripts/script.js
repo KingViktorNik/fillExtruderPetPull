@@ -1,87 +1,131 @@
-const radioWidthTape = document.getElementById("width-tape-radio");
-const radioPercentageOfFilling = document.getElementById("percentage-of-filling-radio");
+const buttonCalc = document.querySelector(".form__button__calcRun");
+const buttonClear = document.querySelector(".form__button__clearRun");
 
-radioWidthTape.addEventListener("click", () => {
-  document.getElementById("widthTapeNumber").disabled = true;
-  document.getElementById("widthTapeRange").disabled = true;
+const thicknessTapeMinNumber = document.getElementById("thicknessTapeMinNumber");
+const thicknessTapeMinRange = document.querySelector(".thickness-tape-min-range");
 
-  document.getElementById("percentageOfFillingNumber").disabled = false;
-  document.getElementById("percentageOfFillingRange").disabled = false;
+const paramCalc = JSON.parse(localStorage.getItem("paramCalc"));
+syncingNumberAndRandge('.diameter-range', 'diameterNumber');
+syncingNumberAndRandge('.percentage-of-filling-range', 'percentageOfFillingNumber');
+syncingNumberAndRandge('.thickness-tape-min-range', 'thicknessTapeMinNumber');
+syncingNumberAndRandge('.thickness-tape-max-range', 'thicknessTapeMaxNumber');
+syncingNumberAndRandge('.step-range', 'stepNumber');
+syncingNumberAndRandge('.shrinkage-range', 'shrinkageNumber');
 
-});
 
-radioPercentageOfFilling.addEventListener("click", () => {
-  document.getElementById("widthTapeNumber").disabled = false;
-  document.getElementById("widthTapeRange").disabled = false;
 
-  document.getElementById("percentageOfFillingNumber").disabled = true;
-  document.getElementById("percentageOfFillingRange").disabled = true;
-
-});
-
-const buttonCount = document.querySelector(".button_count");
-const buttonClear = document.querySelector(".button_clear");
-const result = document.querySelector(".result p");
-
-// событие клавиши calcRun
-buttonCount.addEventListener("click", () => {
-  const pamCalc = {
-    // диаметр прутка
-    diameter: document.getElementById("diameter").value,
-    // процетн заполнения
-    percentageOfFilling: document.getElementById("percentageOfFillingNumber").disabled
-                                 ? -1
-                                 : document.getElementById("percentageOfFillingNumber").value,
-    // ширина ленты
-    widthTape: document.getElementById("widthTapeNumber").disabled
-                       ? -1
-                       : document.getElementById("widthTapeNumber").value,
-    // толщина ленты
-    thicknessTape: document.getElementById("thicknessTapeNumber").value
-
-  }
-  
-  console.log(pamCalc);
-  const result = calcRun(pamCalc);
-  if (pamCalc.percentageOfFilling === -1) {
-    document.getElementById("percentageOfFillingNumber").value = result.toFixed(2);
-  }
-
-  if (pamCalc.widthTape === -1) {
-    document.getElementById("widthTapeNumber").value = result.toFixed(2);
-  }
-
-  console.log(result.textContent);
-
-});
-
-// событие клавиши clear
-buttonClear.addEventListener("click", () => {
+if (paramCalc === null) {
+  onClickCalc();
+} else {
   // диаметр прутка
-  document.getElementById("diameter").value = 1.75;
-  document.querySelector(".diameter-range").value = 1.75;
+  document.getElementById("diameterNumber").value = paramCalc.diameter;
+  document.querySelector(".diameter-range").value = paramCalc.diameter;
   // процетн заполнения
-  document.getElementById("percentageOfFillingNumber").value = 80;
-  document.querySelector(".percentage-of-filling-range").value = 80;
-  // ширина ленты
-  document.getElementById("widthTapeNumber").value = 4.8;
-  document.querySelector(".width-tape-range").value = 4.8;
-  // толщина ленты
-  document.getElementById("thicknessTapeNumber").value = 0.4;
-  document.querySelector(".thickness-tape-range").value = 0.4;
+  document.getElementById("percentageOfFillingNumber").value = paramCalc.percentageOfFilling;
+  document.querySelector(".percentage-of-filling-range").value = paramCalc.percentageOfFilling;
+  // толщина ленты минимальная
+  document.getElementById("thicknessTapeMinNumber").value = paramCalc.thicknessTapeMin;
+  document.querySelector(".thickness-tape-min-range").value = paramCalc.thicknessTapeMin;
+  // толщина ленты максимальная
+  document.getElementById("thicknessTapeMaxNumber").value = paramCalc.thicknessTapeMax;
+  document.querySelector(".thickness-tape-max-range").value = paramCalc.thicknessTapeMax;
+  // шаг
+  document.getElementById("stepNumber").value = paramCalc.step;
+  document.querySelector(".step-range").value = paramCalc.step;
+  // усадка материала
+  document.getElementById("shrinkageNumber").value = paramCalc.shrinkage;
+  document.querySelector(".shrinkage-range").value = paramCalc.shrinkage;
 
-});
+}
+// расчет по значениям установленных по умолчанию
+onClickCalc();
+// коректировка минимального зачиния
+minMaxCorection();
 
-function calcRun({diameter, percentageOfFilling, widthTape, thicknessTape}) {
+// событие клавиши calc
+buttonCalc.addEventListener("click", onClickCalc);
+// событие клавиши clear
+buttonClear.addEventListener("click", onClickClear);
+// коректировка минимального зачиния в поле ввода толщины ленты максимальная
+thicknessTapeMinNumber.addEventListener("change", minMaxCorection);
+// коректировка минимального зачиния в значении ползунка толщины ленты максимальная
+thicknessTapeMinRange.addEventListener("change", minMaxCorection);
+
+
+function onClickCalc() {
+  const paramCalc = {
+    // диаметр прутка
+    diameter: document.getElementById("diameterNumber").value,
+    // процетн заполнения
+    percentageOfFilling: document.getElementById("percentageOfFillingNumber").value,
+    // толщина ленты минимальная
+    thicknessTapeMin: document.getElementById("thicknessTapeMinNumber").value,
+    // толщина ленты максимальная
+    thicknessTapeMax: document.getElementById("thicknessTapeMaxNumber").value,
+    // шаг расчета
+    step: document.getElementById("stepNumber").value,
+    // процент усадки
+    shrinkage: document.getElementById("shrinkageNumber").value
+
+  }
+
+  const resultTable = calcRun(paramCalc);
+  localStorage.setItem("paramCalc", JSON.stringify(paramCalc));
+
+  let newTable = document.querySelector(".foorm__result__table");
+
+  if( newTable != null) {
+    document.querySelector(".foorm__result").removeChild(newTable);
+  }
+
+  newTable =  document.createElement("table");
+  newTable.setAttribute("class", "foorm__result__table");
+
+  const newRow = document.createElement("tr");
+
+  newRow.innerHTML = `<th>Толщина(мм)</th> <th>Ширина(мм)</th>`;
+
+  newTable.appendChild(newRow);
+
+  document.querySelector(".foorm__result").appendChild(newTable);
+
+  resultTable.forEach(el => addTable(el))
+
+  document.querySelector(".foorm__result").style.display =  'flex';
+}
+
+function onClickClear() {
+    // диаметр прутка
+    document.getElementById("diameterNumber").value = "1.75";
+    document.querySelector(".diameter-range").value = "1.75";
+    // процетн заполнения
+    document.getElementById("percentageOfFillingNumber").value = "100";
+    document.querySelector(".percentage-of-filling-range").value = "100";
+    // толщина ленты минимальная
+    document.getElementById("thicknessTapeMinNumber").value = "0.2";
+    document.querySelector(".thickness-tape-min-range").value = "0.2";
+    // толщина ленты максимальная
+    document.getElementById("thicknessTapeMaxNumber").value = "0.4";
+    document.querySelector(".thickness-tape-max-range").value = "0.4";
+    // шаг
+    document.getElementById("stepNumber").value = "0.05";
+    document.querySelector(".step-range").value = "0.05";
+    // усадка материала
+    document.getElementById("shrinkageNumber").value = "0";
+    document.querySelector(".shrinkage-range").value = "0";
+    onClickCalc();
+}
+
+function calcRun({diameter, percentageOfFilling, thicknessTapeMin, thicknessTapeMax, step, shrinkage}) {
   /**
-   * Функция calcRun выполняет вычисления по расчету ширины ленты или процента заполнения.
-   * ***
-   * пример: есди необходимо вычислить ширину ленты, в пораметре "процента заполнения"(percentageOfFilling) необходимо передать -1
+   * Функция calcRun выполняет вычисления по расчету ширины ленты в деопозоне толшин ленты.
    * ***
    * @diameter [number] - деаметр заполнения прутка
    * @percentageOfFilling [number] - процент заполнения
-   * @widthTape [number] - ширина ленты
-   * @thicknessTape [number] - толщина ленты
+   * @thicknessTapeMin [number] - минимальная толщина ленты
+   * @thicknessTapeMax [number] - максимальная толщина ленты
+   * @step [number] - шаг расчета ширины ленты
+   * @shrinkage [number] - процент усадки материала ленты
    * ***
    * @return [number]
    */
@@ -89,26 +133,56 @@ function calcRun({diameter, percentageOfFilling, widthTape, thicknessTape}) {
   // площадь прутка
   const crossSectionalAreaNormal = Math.PI * Math.pow(diameter, 2) / 4;
 
-  //вычисление ширины ленты
-  if (widthTape === -1) {
-    return crossSectionalAreaNormal * (percentageOfFilling / 100) / thicknessTape;
+  // вычисление процента заполнения
+  percentageOfFilling = percentageOfFilling * 0.01 ;
+
+  // вычисления процента усадки материала
+  if (shrinkage == 0) {
+    shrinkage = 1;
+  } else {
+    shrinkage = (100 - shrinkage) / 100;
 
   }
 
-  //вычисление процента заполнения
-  if (percentageOfFilling === -1) {
-    const crossSectionalArea = thicknessTape * widthTape; // площадь ленты
+  let result = new Array();
 
-    return (crossSectionalArea / crossSectionalAreaNormal) * 100; // количество заполнения прутка в процентах
+  for (let i = thicknessTapeMax; i >= thicknessTapeMin; i -= step) {
+    let crossSectionalAreaShrinkage = crossSectionalAreaNormal * shrinkage;
+    let widthTape = crossSectionalAreaShrinkage * percentageOfFilling / i;
+    let thicknessTape = i;
+
+    result.push({thicknessTape, widthTape});
+  }
+
+  return result;
+
+}
+
+function minMaxCorection() {
+  const thicknessTapeMaxNumber = document.querySelector(".thickness-tape-max-number");
+  const thicknessTapeMaxRange = document.querySelector(".thickness-tape-max-range");
+
+  thicknessTapeMaxNumber.min = thicknessTapeMinNumber.value;
+  thicknessTapeMaxRange.min = thicknessTapeMinNumber.value;
+
+  if(thicknessTapeMaxNumber.value <= thicknessTapeMinNumber.value) {
+    thicknessTapeMaxNumber.value = thicknessTapeMinNumber.value;
+    thicknessTapeMaxNumber.value = thicknessTapeMinNumber.value;
 
   }
 
 }
 
-syncingNumberAndRandge('.diameter-range', 'diameter');
-syncingNumberAndRandge('.percentage-of-filling-range', 'percentageOfFillingNumber');
-syncingNumberAndRandge('.width-tape-range', 'widthTapeNumber');
-syncingNumberAndRandge('.thickness-tape-range', 'thicknessTapeNumber');
+function addTable({thicknessTape, widthTape}) {
+  thicknessTape = Number.parseFloat(thicknessTape).toFixed(2);
+  widthTape =  Number.parseFloat(widthTape).toFixed(2);
+
+  const table = document.querySelector(".foorm__result__table");
+  const newRow = document.createElement("tr");
+
+  newRow.innerHTML = `<td>${thicknessTape}</td> <td>${widthTape}</td>`;
+  table.appendChild(newRow);
+}
 
 function syncingNumberAndRandge(classRange, idNumber) {
   const range = document.querySelector(classRange);
@@ -116,11 +190,10 @@ function syncingNumberAndRandge(classRange, idNumber) {
 
   range.addEventListener('input', numberAndRange(number));
   number.addEventListener('input', numberAndRange(range));
-  
+
   function numberAndRange(el) {
     return event => el.value = event.target.value;
 
   }
 
 }
-

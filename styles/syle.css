@@ -12,59 +12,46 @@
 
 .visually-hidden {
   position: absolute; /* элемент вырывают из потока */
+  margin: -1px; /* элемент убирают из поля зрения, сдвинув на размер самого себя */
+  border: 0; /* убирают границу, она тоже может быть у каких-то элементов */
+  padding: 0; /* обнуляют отступы, они есть у некоторых элементов по умолчанию */
+  overflow: hidden; /* на всякий случай скрывают видимое за пределами блока */
+  clip: rect(0 0 0 0); /* это свойство обрезает видимую область до нулевого значения */
   inline-size: 1px; /* делают элемент очень маленьким, но таким, чтобы не пропал совсем */
   block-size: 1px;
-  margin: -1px; /* элемент убирают из поля зрения, сдвинув на размер самого себя */
-  padding: 0; /* обнуляют отступы, они есть у некоторых элементов по умолчанию */
-  border: 0; /* убирают границу, она тоже может быть у каких-то элементов */
-  clip: rect(0 0 0 0); /* это свойство обрезает видимую область до нулевого значения */
-  overflow: hidden; /* на всякий случай скрывают видимое за пределами блока */
 }
 
 .body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-block-size: 100vh;
-  background-color: rgb(41, 37, 53);
   color: #e9e9e9;
+  background-color: rgb(41, 37, 53);
+  min-block-size: 100vh;
 }
 
 .header{
   display: flex;
   justify-content: center;
   margin-block-end: 10px;
-  padding-block: 10px;
-  background-color: var(--background-color);
-  color: var(--text-color);
   border-block-end: var(--border-color-header-footer);
+  padding-block: 10px;
+  color: var(--text-color);
+  background-color: var(--background-color);
 
 }
 
 .header__title {
-  text-transform: uppercase;
   font-family: var(--text-family);
+  text-transform: uppercase;
 
 }
 
 .main {
   align-self: center;
+  padding-block: 20px;
   inline-size: 90%;
   max-inline-size: 800px;
-}
-
-.radio + .label {
-  font-size: clamp(0.875rem, 0.6681rem + 1.0345vw, 1.25rem);
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
-  padding: 5px;
-  text-align: center;
-}
-
-.radio:checked + .label {
-  border-bottom-color: var(--text-color);
-  border-top-color: var(--text-color);
-  background-image: linear-gradient(175deg,#7be95c, #0f4001);
 }
 
 .form {
@@ -76,18 +63,13 @@
 .fieldset {
   display: flex;
   flex-direction: column;
-  text-transform: lowercase;
-  padding-block-start: 20px;
-  border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, .3);
-  font-family: var(--text-family);
+  border-radius: 10px;
+  padding-block-start: 20px;
   color: var(--text-color);
+  font-family: var(--text-family);
+  text-transform: lowercase;
   background-color: rgba(0, 0, 0, .25);
-}
-
-.form__radio {
-  flex-direction: row;
-  justify-content: space-around;
 }
 
 .fieldset div {
@@ -102,26 +84,26 @@
 }
 
 .label {
-  text-transform: uppercase;
-  font-family: var(--text-family);
   color: var(--text-color);
+  font-family: var(--text-family);
+  text-transform: uppercase;
 }
 
 .number {
-  background-color: rgba(255, 255, 255, .1);
   border: none;
-  font-size: 20px;
-  color: var(--text-color);
-  min-inline-size: 100px;
-  padding-block: 5px;
   border-radius: 5px;
+  padding-block: 5px;
+  color: var(--text-color);
+  font-size: 20px;
   text-align: center;
+  background-color: rgba(255, 255, 255, .1);
+  min-inline-size: 100px;
 }
 
 .range {
   display: flex;
-  max-inline-size: 100%;
   margin-block: 15px;
+  max-inline-size: 100%;
   accent-color: #02810d;
 }
 
@@ -135,26 +117,26 @@
 }
 
 .button {
-  block-size: 50px;
   border-radius: 10px;
-  font-family: var(--text-family);
-  text-transform: uppercase;
-  font-size: clamp(0.625rem, 0.4489rem + 0.8803vw, 1.25rem);
   color: rgba(255, 255, 255, .6);
+  font-family: var(--text-family);
+  font-size: clamp(0.625rem, 0.4489rem + 0.8803vw, 1.25rem);
+  text-transform: uppercase;
+  block-size: 50px;
 }
 
-.button_count {
-  inline-size: calc((100% / 10) * 6);
+.form__button__calcRun {
+  border: 1px solid #145801;
   background-color: #3fb81e;
   background-image: linear-gradient(175deg,#7be95c, #0f4001);
-  border: 1px solid #145801;
+  inline-size: calc((100% / 10) * 6);
 }
 
-.button_clear {
-  inline-size: calc((100% / 10) * 4);
+.form__button__clearRun {
+  border: 1px solid #5c3f00;
   background-color: #b8871e;
   background-image: linear-gradient(175deg,#ffaf02, #422d00);
-  border: 1px solid #5c3f00;
+  inline-size: calc((100% / 10) * 4);
 }
 
 .button:active {
@@ -162,10 +144,31 @@
   opacity: .7;
 }
 
-.button:hover, .button:focus-visible, .number:focus-visible,  .range:focus-visible, .radio:hover {
+.button:hover, .button:focus-visible, .number:focus-visible,  .range:focus-visible {
   outline: 1px solid rgba(0, 255, 140, 0.6);;
   outline-offset: 0;
   cursor: pointer;
+}
+
+.foorm__result {
+  border: 1px solid var(--background-color);
+  padding: 5px;
+  font-family: var(--text-family);
+  text-align: center;
+}
+
+.foorm__result__table {
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+.foorm__result__table tr:nth-child(1) {
+  color: var(--background-color);
+  background-color: var(--text-color);
+}
+
+.foorm__result__table tr:nth-child(2n+3) {
+  background-color: rgba(255, 255, 255, .1);
 }
 
 .number:disabled {
@@ -175,18 +178,18 @@
 
 .footer {
   display: flex;
-  padding-block: 15px;
   justify-content: center;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  text-transform: uppercase;
-  font-family: var(--text-family);
   border-block-start: var(--border-color-header-footer);
+  padding-block: 15px;
+  color: var(--text-color);
+  font-family: var(--text-family);
+  text-transform: uppercase;
+  background-color: var(--background-color);
 
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
     margin: 0;
+    -webkit-appearance: none;
 }

@@ -24,68 +24,94 @@
   </header>
   <main class="main">
     <form class="form" name="form">
-      <fieldset class="form__radio fieldset" name="form__radio">
-        <legend>параметры расчета</legend>
-        <div id="width-tape">
-          <input name="radio" type="radio" id="width-tape-radio" class="radio visually-hidden" checked>
-          <label for="width-tape-radio" class="label">ширина ленты</label>
-        </div>
-        <div id="percentage-of-filling">
-          <input name="radio" type="radio" id="percentage-of-filling-radio" class="radio visually-hidden">
-          <label for="percentage-of-filling-radio" class="label">процент заполнения</label>
-        </div>
-      </fieldset>
-      <fieldset class="form__data_feloment fieldset">
+      <fieldset class="fieldset">
         <legend>информация о прутке</legend>
+        <!-- Деаметр -->
         <div>
-          <label class="label" for="diameter-number">Деаметр (mm)</label>
+          <label class="label" for="diameterNumber">Деаметр (mm)</label>
           <input type="number" min="1" max="3" step="0.05"
-              class="diameter-number number" name="diameter"
-              id="diameter" value="1.75">
+              class="diameter-number number"
+              id="diameterNumber" value="0">
         </div>
         <input type="range" min="1" max="3" step="0.05"
-              class="diameter-range range" name="diameter"
-              id="diameter" value="1.75">
+            class="diameter-range range"
+            value="0">
+        <!-- Заполнение -->
         <div>
-          <label title="sfsdf" class="label" for="percentage-of-filling-number">Заполнение (%)</label>
+          <label class="label" for="percentageOfFillingNumber">Заполнение (%)</label>
           <input type="number" min="10" max="110" step="5"
-                class="percentage-of-filling-number  number" name="percentage-of-filling-number"
-                id="percentageOfFillingNumber" value="80">
+              class="percentage-of-filling-number  number"
+              id="percentageOfFillingNumber" value="0">
         </div>
         <input type="range" min="10" max="110" step="5"
-                class="percentage-of-filling-range range" name="percentageOfFilling"
-                id="percentageOfFillingRange" value="80">
+            class="percentage-of-filling-range range"
+            value="0">
       </fieldset>
 
-      <fieldset class="form__date_tape fieldset">
-        <legend>информация о ленте</legend>
+      <fieldset class="fieldset">
+        <legend>параметры расчета</legend>
+        <!-- Толщина ленты минимальная -->
         <div>
-          <label class="label" for="width-tape-number">ширина (mm)</label>
-          <input type="number" min="1" max="20" step="0.1"
-                class="width-tape-number  width-tape number" name="widthTape"
-                id="widthTapeNumber" value="4.8" disabled>
+          <label class="label" for="thicknessTapeMinNumber">Толщина ленты минимальная (mm)</label>
+          <input type="number" min="0.1" max="0.5" step="0.01"
+              class="thickness-tape-min-number number"
+              id="thicknessTapeMinNumber" value="0">
         </div>
-        <input type="range" min="0.1" max="20" step="0.1"
-              class="width-tape-range width-tape range" name="widthTape"
-              id="widthTapeRange" value="5.0" disabled>
+        <input type="range" min="0.1" max="0.5" step="0.01"
+            class="thickness-tape-min-range range" name="thicknessTape"
+            value="0">
+        <!-- Толщина ленты максимальная -->
         <div>
-          <label title="sfsdf" class="label" for="thickness-tape-number">толщина (mm)</label>
-          <input type="number" min="0.1" max="1" step="0.01"
-                class="thickness-tape-number  number" name="thicknessTape"
-                id="thicknessTapeNumber" value="0.4">
+          <label class="label" for="thicknessTapeMaxNumber">Толщина ленты максимальная (mm)</label>
+          <input type="number" min="0.3" max="1" step="0.01"
+              class="thickness-tape-max-number number"
+              id="thicknessTapeMaxNumber" value="0">
         </div>
-        <input type="range" min="0.1" max="1" step="0.01"
-              class="thickness-tape-range range" name="thicknessTape"
-              id="thicknessTapeRange" value="0.4">
-      </fieldset>
+        <input type="range" min="0.3" max="1" step="0.01"
+            class="thickness-tape-max-range range"
+            value="0">
+        <!-- Шаг -->
+        <div>
+          <label class="label" for="stepNumber">Шаг (mm)</label>
+          <input type="number" min="0.01" max="1" step="0.01"
+              class="step-number number"
+              id="stepNumber" value="0.05">
+        </div>
+        <input type="range" min="0.01" max="1" step="0.01"
+            class="step-range range"
+            value="0">
+        <!-- Усадка материала -->
+        <div>
+          <label class="label" for="shrinkageNumber">Усадка материала (%)</label>
+          <input type="number" min="0" max="100" step="5"
+              class="shrinkage-number number"
+              id="shrinkageNumber" value="0">
+        </div>
+        <input type="range" min="0" max="100" step="5"
+            class="shrinkage-range range"
+            value="0">
 
+      </fieldset>
+      <!-- Блок кнопак -->
       <fieldset class="form__button fieldset">
         <legend class="visually-hidden">кнопки калькулятора</legend>
-        <button type="button" class="button button_count">Рассчитать</button>
-        <button type="button" class="button button_clear">Сброс</button>
-    </fieldset>
+        <button type="button" class="button form__button__calcRun">Рассчитать</button>
+        <button type="button" class="button form__button__clearRun">Сброс</button>
+      </fieldset>
+      <!-- Результат -->
+      <fieldset class="foorm__result fieldset">
+        <!-- таблица формеруется с помощю js -->
+        <!-- <table class="foorm__result__table">
+          <tr>
+            <th>Толщина</th>
+            <th>Ширина</th>
+          </tr>
+          <td></td>
+        </table> -->
+      </fieldset>
     </form>
   </main>
+
   <footer class="footer"></footer>
   <script src="./scripts/script.js"></script>
 </body>
